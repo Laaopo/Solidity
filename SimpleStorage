@@ -1,0 +1,65 @@
+// SPDX-License-Identifier: MIT
+pragma solidity 0.8.7;
+
+    // Low level Variable boolean, uint, int, address, bytes
+    // bool ImHereStoreNumber = true;
+    // uint ImHereStoreNumbers = 55;
+    // int  ImHereStoreNumberInt = -96;
+    // string ImHereStoreNumberInstring = "Nine"; // Characters convert into in bytes  
+    // address ImHereStoreAddress = 0xe5cFe709B3eF3d279568F3061061Dd8fBc388BC7;
+    // bytes32 ImHereStoreInBytes = "moon"; // bytes always store in 0x12345abcd this formate
+    // by default store 0 value
+    //0xd9145CCE52D386f254917e481eB44e9943F39138 Every Contract Has unique address like this
+    // In Solidity Two Function Not Use Gas For Runing its  View and Pure.
+    // view and pure disallow modification of state
+    // and Pure disallow you to read from blockchain state see the
+    
+    //function add() public pure returns (uint256){
+        //return (1+1);
+    //}
+    //by default visibility is private that way we can't see value
+
+contract SinpleStorage {
+    
+    uint256 ImHereStoreNumber;
+
+    //mapping store value in dictionary form 
+    mapping (string => uint256) public nameWhereStoreNumber;
+
+    struct People {
+        uint256 ImHereStoreNumber;
+        string name;
+    }
+
+    People[] public people;
+
+    function store (uint256 _ImHereStoreNumber) public {
+        ImHereStoreNumber = _ImHereStoreNumber;
+
+    }
+
+    function retrieve () public view returns (uint256){
+        return ImHereStoreNumber;
+    }
+
+    // First method: 
+    //adding people on array people.push(People(_ImHereStoreNumber,_name)); 
+    //Second method: 
+    //People memory newPerson = People({ImHereStoreNumber: _ImHereStoreNumber, name: _name});
+    //Third method without using memory keyword;
+    //people.push(People(_ImHereStoreNumber,_name)); 
+
+    function addPerson(string memory _name, uint256 _ImHereStoreNumber) public {
+        people.push(People(_ImHereStoreNumber,_name));
+        nameWhereStoreNumber[_name] = _ImHereStoreNumber; 
+
+    }
+
+    // EVM can access and store information in six places:
+    // 1.Stack 2.Memory 3.Storage 4.Calldata 5.Code 6.Logs
+    //Important storage 1.calldata 2.memory 3.storage
+    // Calldata and Memory only exist temprarely
+    // calldata can not modify
+    // memory can modify 
+    // Storage can be modify it is permanent variable
+}
