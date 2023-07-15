@@ -1,0 +1,83 @@
+// SPDX-License-Identifier: MIT
+pragma solidity 0.8.7;
+   
+//First import method;
+
+/*contract SimpleStorage {
+
+    uint256 ImHereStoreNumber;
+    mapping (string => uint256) public nameWhereStoreNumber;
+
+    struct People {
+        uint256 ImHereStoreNumber;
+        string name;
+    }
+
+    People[] public people;
+
+    function store (uint256 _ImHereStoreNumber) public {
+        ImHereStoreNumber = _ImHereStoreNumber;
+
+    }
+    function retrieve () public view returns (uint256){
+        return ImHereStoreNumber;
+    }
+    function addPerson(string memory _name, uint256 _ImHereStoreNumber) public {
+        people.push(People(_ImHereStoreNumber,_name));
+        nameWhereStoreNumber[_name] = _ImHereStoreNumber; 
+    }
+}
+*/
+
+    //Second type importes method:
+
+import "./SimpleStorage.sol";
+
+// This Contract create storage 
+contract StorageFactory{
+
+    SimpleStorage[] public simpleStorageArray;
+
+    //This Function create storage
+    function createStorage() public {
+    SimpleStorage  simpleStorage = new SimpleStorage();
+    // This simpleStorageArray is store Address when any one run this code the address show
+    simpleStorageArray.push(simpleStorage);
+        
+   }
+
+
+   //This function Store the data on it Array
+   function sfStore(uint256 _simpleStorageIndex, uint256 _simpleStorageNumber) public {
+       /*
+       First Method is 
+           SimpleStorage simpleStorage = SimpleStorage (simpleStorageArray[_simpleStorageIndex]);
+
+       */
+    /*
+    Data store on Array index
+    First Method:   
+     SimpleStorage simpleStorage = simpleStorageArray[_simpleStorageIndex];
+     simpleStorage.store(_simpleStorageNumber); 
+     */
+    //Second Method;
+     simpleStorageArray[_simpleStorageIndex].store(_simpleStorageNumber);
+     
+   }
+
+   //This Function Read the data from Array by retrieve index
+
+   function sfGet(uint256 _simpleStorageIndex) public view returns (uint256){
+       /*First Method to Retrieve Data:
+       SimpleStorage simpleStorage = simpleStorageArray[_simpleStorageIndex];
+       */
+       //Second Method;
+        
+    return simpleStorageArray[_simpleStorageIndex].retrieve();
+       
+   }
+
+
+}
+
+
