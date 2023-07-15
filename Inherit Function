@@ -1,0 +1,26 @@
+// SPDX-License-Identifier: MIT
+pragma solidity 0.8.7;
+
+/*
+In this Contract I want to use StorageFactory Some Function so that I have two way 
+ethier use full of copy contract of StorageFactory Or Inherit Function from StorageFactory
+*/ 
+
+import"./SimpleStorage.sol";
+
+// First Import contract then write the contract name with is keyword along with contract
+
+contract ExtraStorage  is SimpleStorage{
+    /*
+    In this section i want to store number on ImHereStoreNumber with extra +5 so that i need two keyword
+    Override
+    Virtual 
+    */
+    
+    function store (uint256 _ImHereStoreNumber) public override  {
+        ImHereStoreNumber = _ImHereStoreNumber + 5;
+
+    }
+
+
+}
