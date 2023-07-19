@@ -1,0 +1,45 @@
+// SPDX-License-Identifier: MIT
+pragma solidity 0.8.7;
+
+import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
+
+/*
+Library Can not have State Variable
+Can't Send ETh and All Function in Library Internal
+*/
+library PriceConverter{
+
+
+        /*
+        Want to get price for any coin we two things
+        1. ABI
+        2. Address: 0x694AA1769357215DE4FAC081bf1f309aDC325306
+        this address is the chain which is used to develop this contract as like 
+        Sepolia or Rinkbe or any testnet or mainnet
+        */
+
+
+        function getPrice() internal  view returns(uint256) {
+        AggregatorV3Interface priceFeed = AggregatorV3Interface (0x694AA1769357215DE4FAC081bf1f309aDC325306);
+        (,int256 price,,,) = priceFeed.latestRoundData();
+        //ETH in term of USD 
+        //3000.00000000
+        return uint256(price * 1e10); //1**10 = 10000000000
+
+    }
+
+    function getVersion() internal  view returns(uint256){
+        AggregatorV3Interface priceFeed = AggregatorV3Interface(0x694AA1769357215DE4FAC081bf1f309aDC325306);
+        return priceFeed.version();
+    } 
+
+    
+
+    function getConverationRate(uint256 ethAmount) internal  view returns (uint256){
+        uint256 ethPrice = getPrice();
+        //In this opration note that in solidity always first multiple and ad then divide 
+        uint256 ethAmountInusd = (ethPrice * ethAmount) / 1e18;
+        return ethAmountInusd;
+    }
+
+}
