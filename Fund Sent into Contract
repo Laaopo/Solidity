@@ -1,0 +1,68 @@
+// SPDX-License-Identifier: MIT
+pragma solidity 0.8.7;
+import"./PriceConvertLib.sol";
+
+contract Fundme{
+    using PriceConverter for uint256;
+
+    uint256 public  minimumUsd = 50 * 1e18; // 1 * 10 ** 18
+    address[] public funders; // This array store all sender address who send the ETH
+    mapping(address => uint256) public addressToAmountGet; // This mapping function map the all address to amount get by users
+
+ 
+         /*
+        Want to be able to send a minimum usd fund in this contract
+        How to do we send ETH on this Contract
+        1e18 == 1 * 10 ** 18 = 1000000000000000000
+        1 ETH = 1e18 
+        1 ETH =  Gwei 1000000000
+        1 ETH =  Wei 1000000000000000000
+        */
+    function Fund() public payable {
+        //msg.value.getConverationRate();
+        require(msg.value.getConverationRate() >= minimumUsd, "Didn't send enough!");
+        funders.push(msg.sender);
+        addressToAmountGet[msg.sender] = msg.value;
+    }
+    /*
+    1.If we want to access any data from a list or array , 
+    mapping we used loop to retrieve the value one by one 
+    2. funderIndex = funderIndex + 1 or funderIndex++ for increasing value */
+    /*We define condition as like *starting index, ending index, stop amount* */
+
+    function withdraw () public {
+        for(uint256 funderIndex =0; funderIndex < funders.length; funderIndex++){
+            address funder = funders[funderIndex];
+            addressToAmountGet[funder] = 0;
+        }
+        //Reset Array
+        funders = new address[](0);
+        // How actually withdraw the funds
+
+        /*
+        1. we three way to send ETH on contract
+        2. First Transfer
+        3. Second Send
+        4. Forth Call
+        */ 
+
+        //msg.sender = address
+        // when we want to withdraw main chain coin we call payable function
+        // payable(msg.sender) = payable address
+        
+        // 1 way to send ETH or Token this method automatically revert and consume more gas
+        payable(msg.sender).transfer(address(this).balance);
+
+        // 2 way way to send ETH or Token this method only revert when we add require add
+        bool sendSuccess = payable(msg.sender).send(address(this).balance);
+        require (sendSuccess, "Send failed");
+
+        // 3 way way to send ETH or Token this method only revert when we add require add
+        (bool callSuccess, ) = payable(msg.sender).call{value: address(this).balance}("");
+        require(callSuccess, "Call Failed");
+
+
+
+    }
+    
+}
